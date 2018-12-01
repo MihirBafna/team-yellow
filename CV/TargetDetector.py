@@ -5,6 +5,8 @@ class TargetDetector:
     contours = None                                             # variable that will hold the array of contours
     index = None                                                # index variable that will hold the index of the proper contour
     corners = None                                              # variable that holds the array of corner points
+    isRect = False
+    isCross = False
 
     def __init__(self):
         pass
@@ -24,11 +26,19 @@ class TargetDetector:
         for c in range(len(self.contours)):
             epsilon = 0.01 * cv2.arcLength(self.contours[c],True)
             approx = cv2.approxPolyDP(self.contours[c],epsilon, True)
-            if(len(approx)>=4 and cv2.contourArea(approx)>1000):
+            if(len(approx)==4 and cv2.contourArea(approx)>1000):
                 # and cv2.contourArea(approx)>300
                 self.index = c
                 self.corners = approx
+                self.isRect = True
+                self.isCross = False
+            if(len(approx) == 12 and cv2.contourArea(approx) > 1000):
+                # and cv2.contourArea(approx)>300
+                self.index = c
+                self.corners = approx
+                self.isCross = True
+                self.isRect = False
 
 # getter method that returns the contours array, index of significant contour, and the corners array
     def getContours(self):
-        return self.contours,self.index,self.corners
+        return self.contours,self.index,self.corners,self.isCross,self.isRect
