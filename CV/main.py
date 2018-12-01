@@ -1,6 +1,7 @@
 from Target import Target
 from TargetDetector import TargetDetector as Detector
 from TargetProcessor import TargetProcessor as Processor
+from Network import Network
 import numpy as np
 import cv2
 
@@ -28,7 +29,12 @@ def displayValues():
 #------------------------------- FOR LIVE VIDEO -------------------------------#
 cam = cv2.VideoCapture(0)
 
+network = Network()
+network.userServer()
+
 while(True):                                                                    # while loop for continuous analyzation of frames through video capture
+    network.waitForPing()
+
     ret, frame = cam.read()
     h,w = frame.shape[:2]                                                       # gets the height and width of the frame for analyzation purposes
     imgXcenter = w/2
@@ -60,6 +66,9 @@ while(True):                                                                    
             proc.calculate(focalLength,crossActualWidth,Imagewidth,Xmid-imgXcenter,imgYcenter-Ymid)
     contoured=cv2.resize(frame,None,fx=0.5,fy=0.5)
     threshed=cv2.resize(threshold,None,fx=0.5,fy=0.5)
+
+    network.setRect(True, proc.getAzimuth())
+
     displayValues()                                                             # method displays values in terminal
     cv2.imshow("contoured", contoured)
     cv2.imshow("threshed", threshed)
