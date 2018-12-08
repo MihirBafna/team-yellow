@@ -2,17 +2,17 @@
 2018 - 2019 Team Yellow Mock Season Code for Computer Vision
 
 # Installation and Dependencies
-'''bash
+```bash
 pip install opencv-contrib-python
 pip install numpy
-'''
+```
 
 In your respective files:
-'''python
+```python
 import numpy as np
 import cv2
 import math
-'''
+```
 
 # Usage
 ## Running
