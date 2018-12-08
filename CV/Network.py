@@ -34,6 +34,7 @@ class Network(object):
         self.crossAzi = None
 
     def setCrossAzi(self, azi):
+
         self.crossFound = True
         self.crossAzi = azi
 

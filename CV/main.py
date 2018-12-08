@@ -70,7 +70,6 @@ while(True):                                                                    
     threshed=cv2.resize(threshold,None,fx=0.5,fy=0.5)
 
 
-
     displayValues()                                                             # method displays values in terminal
     cv2.imshow("contoured", contoured)
     cv2.imshow("threshed", threshed)
