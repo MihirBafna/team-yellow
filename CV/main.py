@@ -1,6 +1,7 @@
 from Target import Target
 from TargetDetector import TargetDetector as Detector
 from TargetProcessor import TargetProcessor as Processor
+from Network import Network
 import numpy as np
 import cv2
 
@@ -8,10 +9,10 @@ crossActualWidth = 2.54*6.5
 rectActualWidth = 2.54*7.5
 isRect = False
 isCross = False
-# minThreshold = np.array([0,30,60],np.uint8)
-# maxThreshold = np.array([255,255,255],np.uint8)
-minThreshold = np.array([30,0,200],np.uint8)
-maxThreshold = np.array([90,255,255],np.uint8)
+minThreshold = np.array([0,30,60],np.uint8)
+maxThreshold = np.array([255,255,255],np.uint8)
+# minThreshold = np.array([30,0,200],np.uint8)
+# maxThreshold = np.array([90,255,255],np.uint8)
 # minThreshold = np.array([50,0,240],np.uint8)
 # maxThreshold = np.array([60,255,255],np.uint8)
 lightblue = (255, 221, 0)                                                       # variable for the lightblue color
@@ -32,7 +33,12 @@ def displayValues():
 #------------------------------- FOR LIVE VIDEO -------------------------------#
 cam = cv2.VideoCapture(0)
 
+network = Network()
+network.userServer()
+
 while(True):                                                                    # while loop for continuous analyzation of frames through video capture
+    network.waitForPing()
+
     ret, frame = cam.read()
     h,w = frame.shape[:2]                                                       # gets the height and width of the frame for analyzation purposes
     imgXcenter = w/2
@@ -56,10 +62,15 @@ while(True):                                                                    
         cv2.drawContours(frame, contours, index, lightblue, 8)
         if(isRect):
             proc.calculate(focalLength,rectActualWidth,Imagewidth,Xmid-imgXcenter,imgYcenter-Ymid)
+            network.setRectAzi(proc.getAzimuth())
         if(isCross):
             proc.calculate(focalLength,crossActualWidth,Imagewidth,Xmid-imgXcenter,imgYcenter-Ymid)
+            network.setCrossAzi(proc.getAzimuth())
     contoured=cv2.resize(frame,None,fx=0.5,fy=0.5)
     threshed=cv2.resize(threshold,None,fx=0.5,fy=0.5)
+
+
+
     displayValues()                                                             # method displays values in terminal
     cv2.imshow("contoured", contoured)
     cv2.imshow("threshed", threshed)
