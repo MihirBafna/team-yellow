@@ -34,7 +34,6 @@ class Network(object):
         self.crossAzi = None
 
     def setCrossAzi(self, azi):
-
         self.crossFound = True
         self.crossAzi = azi
 
@@ -63,12 +62,12 @@ class Network(object):
         isInitialized = False
 
     def userServer(self):
-        global s
         thread1 = self.myThread(1, "Thread-1", 1, self)
         thread1.start()
         print("thread started")
 
     def startServer(self): #startServer
+        global s
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         host = "localhost"
         s.bind((host, portNumber))
@@ -79,19 +78,19 @@ class Network(object):
         #while True:
 
         connection, addr = s.accept()
-        print ("accepted")
+        print ("accepted" + str(addr))
         global isInitialized
         isInitialized = True
 
         while True:
             if(self.crossFound != None):
-                self.sendMessage(b"crossFound:" + self.crossFound.lower().encode('utf-8'))
+                self.sendMessage(b"crossFound:" + str(self.crossFound).encode('utf-8'))
                 self.crossFound = None
             if(self.crossAzi != None):
                 self.sendMessage(b"crossAzi:" + self.crossAzi.encode('utf-8'))
                 self.crossAzi = None
             if(self.rectFound != None):
-                self.sendMessage(b"rectFound:" + self.rectFound.lower().encode('utf-8'))
+                self.sendMessage(b"rectFound:" + str(self.rectFound).encode('utf-8'))
                 self.rectFound = None
             if(self.rectAzi != None):
                 self.sendMessage(b"rectAzi:" + self.rectAzi.encode('utf-8'))
