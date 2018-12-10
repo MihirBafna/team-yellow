@@ -8,10 +8,8 @@ class Network(object):
     crossAzi = None
     rectFound = False
     rectAzi = None
-
     portNumber = 0
     isInitialized = False
-    s = None
     connection = None
 
 
@@ -48,14 +46,16 @@ class Network(object):
     def waitForPing(self): #wait for something to be sent
         if(s != None):
             receive = s.recv(1024)
-        if receive == None or receive == ' ' :
-            print ("Hasn't received ping")
+            if receive == None or receive == ' ' :
+                print ("Hasn't received ping")
 
     def sendMessage(self, message): # send message to NTable client
         if(isInitialized !=  False):
             connection.send(message + b'\n')
 
     def __init__(self):
+        global s
+        s = None
         global portNumber
         portNumber = 3341
         global isInitialized
@@ -67,9 +67,9 @@ class Network(object):
         print("thread started")
 
     def startServer(self): #startServer
-        global s
         s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
         host = "localhost"
+        s.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR, 1)
         s.bind((host, portNumber))
 
         global connection
@@ -84,14 +84,14 @@ class Network(object):
 
         while True:
             if(self.crossFound != None):
-                self.sendMessage(b"crossFound:" + str(self.crossFound).encode('utf-8'))
+                self.sendMessage(b"crossFound: " + str(self.crossFound).encode('utf-8'))
                 self.crossFound = None
             if(self.crossAzi != None):
-                self.sendMessage(b"crossAzi:" + self.crossAzi.encode('utf-8'))
+                self.sendMessage(b"crossAzi: " + str(self.crossAzi).encode('utf-8'))
                 self.crossAzi = None
             if(self.rectFound != None):
-                self.sendMessage(b"rectFound:" + str(self.rectFound).encode('utf-8'))
+                self.sendMessage(b"rectFound: " + str(self.rectFound).encode('utf-8'))
                 self.rectFound = None
             if(self.rectAzi != None):
-                self.sendMessage(b"rectAzi:" + self.rectAzi.encode('utf-8'))
+                self.sendMessage(b"rectAzi: " + str(self.rectAzi).encode('utf-8'))
                 self.rectAzi = None

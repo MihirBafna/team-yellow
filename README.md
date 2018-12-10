@@ -1,13 +1,18 @@
 # team-yellow
-2018 - 2019 Team Yellow Mock Season Code for Computer Vision
+2018 - 2019 Team Yellow Mock Season Code for Computer Vision (created by Mihir Bafna and Robert Lee)
 
 # Installation and Dependencies
+
+## Raspberry Pi:
+Follow this tutorial: https://tutorials-raspberrypi.com/installing-opencv-on-the-raspberry-pi/
+
+## Windows or Mac OSX:
 ```bash
 pip install opencv-contrib-python
 pip install numpy
 ```
 
-In your respective files:
+After installations:
 ```python
 import numpy as np
 import cv2
